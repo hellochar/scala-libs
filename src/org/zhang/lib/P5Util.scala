@@ -61,26 +61,57 @@ case class P5Util(p: PApplet) {
     updatePixels
   }
 
-  def drawGraphAxes(val cam:Camera, val tickInterval:Int = 1, val tickLength = .1f) {
+  def drawGraphAxes(cam:Camera, tickInterval:Int = 1, tickLength:Float = .1f) {
     val rect = cam.getRect;
 
-    line(rect.x, 0, rect.x+rect.width, 0); //draw horizontal line
-    line(0, rect.y, 0, rect.y+rect.height); //draw vertical line
+    p.line(rect.x, 0, rect.x+rect.width, 0); //draw horizontal line
+    p.line(0, rect.y, 0, rect.y+rect.height); //draw vertical line
 
     {
       val (modelMin, modelMax) = (cam.model(cam.getCorner).x, cam.model(new PVector(width, height)).x)
       val (min, max) = (modelMin.floor.toInt, modelMax.ceil.toInt);
       for(x <- min until max) {
-        line(x, -tickLength, x, tickLength)
+        p.line(x, -tickLength, x, tickLength)
       }
     }
     {
       val (modelMin, modelMax) = (cam.model(cam.getCorner).y, cam.model(new PVector(width, height)).y) //since y downwards is positive, the minimum y is at the topleft corner.
       val (min, max) = (modelMin.floor.toInt, modelMax.ceil.toInt);
       for(y <- min until max) {
-        line(-tickLength, y, tickLength, y)
+        p.line(-tickLength, y, tickLength, y)
       }
     }
   }
 
+}
+object P5Util {
+  def randomVector(p:PApplet) = Vec2(p.random(p.width), p.random(p.height))
+  @deprecated("Use MyPApplet instead")
+  def ellipse(p:PApplet, center: Vec2, w: Float, h:Float) = p.ellipse(center.x, center.y, w, h)
+
+  @deprecated("Use MyPApplet instead")
+  def line(p:PApplet, start: Vec2, end: Vec2) = p.line(start.x, start.y, end.x, end.y)
+
+  def drawGraphAxes(p:PApplet, cam:Camera, tickInterval:Float = 1f, tickLength:Float = .1f) {
+    val rect = cam.getRect;
+    import p._;
+
+    p.line(rect.x, 0, rect.x+rect.width, 0); //draw horizontal line
+    p.line(0, rect.y, 0, rect.y+rect.height); //draw vertical line
+
+    {
+      val (modelMin, modelMax) = (cam.model(cam.getCorner).x, cam.model(new PVector(width, height)).x)
+      val (min, max) = (modelMin.floor.toInt, modelMax.ceil.toInt);
+      for(x <- Range.Double(min, max, tickInterval)) {
+        p.line(x.toFloat, -tickLength, x.toFloat, tickLength)
+      }
+    }
+    {
+      val (modelMin, modelMax) = (cam.model(cam.getCorner).y, cam.model(new PVector(width, height)).y) //since y downwards is positive, the minimum y is at the topleft corner.
+      val (min, max) = (modelMin.floor.toInt, modelMax.ceil.toInt);
+      for(y <- Range.Double(min, max, tickInterval)) {
+        p.line(-tickLength, y.toFloat, tickLength, y.toFloat)
+      }
+    }
+  }
 }
