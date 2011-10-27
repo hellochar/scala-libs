@@ -10,6 +10,6 @@ import processing.core.PApplet
 * Time: 2:26 PM
 */
 
-  trait HasMV extends PApplet {
-    def mouseVec = Vec2(mouseX, mouseY)
-  }
+trait HasMV extends PApplet {
+  def mouseVec = Vec2(mouseX, mouseY)
+}

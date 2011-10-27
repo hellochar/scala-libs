@@ -18,9 +18,22 @@ package object lib {
   }
 
   def interleave[A](s1:Stream[A], s2:Stream[A]):Stream[A] = Stream.cons(s1.head, Stream.cons(s2.head, interleave(s1.tail, s2.tail)))
-  def partialSum[T](s:Stream[T])(implicit n:Numeric[T]) = {var k = n.zero; s.map(i => {k = n.plus(k, i); k})}
+  def partialSum[T](s:Stream[T])(implicit n:Numeric[T]) = {var k = n.zero; val m = new AnyRef(); s.map(i => m.synchronized{k = n.plus(k, i); k})} //!not thread safe!
   def partialDif[T](s:Stream[T])(implicit n:Numeric[T]) = s.sliding(2).toStream.map{ case a #:: b #:: Stream.Empty => n.minus(b, a) }
+  def partials[A](s:Stream[A]) = {
+    def build(start:Stream[A], rest:Stream[A]):Stream[Stream[A]] = rest match {
+      case a #:: b => {
+        val s = start :+ a;
+        Stream.cons(s, build(s, b))
+      }
+      case Stream.Empty => Stream.Empty
+    }
+    build(Stream.empty, s)
+  }
 
+  def average[A](s:collection.GenTraversableOnce[A])(implicit n:Fractional[A]) = n.div(s.sum, n.fromInt(s.size));
+  def average(s:collection.GenTraversableOnce[Int]) = s.sum / s.size;
+  
   //selects a random element from the iterable.
   def random[A](e:Iterable[A]) = e.view.drop((math.random*e.size).toInt).first
 

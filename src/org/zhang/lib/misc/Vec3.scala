@@ -20,9 +20,10 @@ object Vec3 {
   def apply(t: Float):Vec3 = Vec3(t, t, t)
   def apply(t: (Float, Float, Float)):Vec3 = Vec3(t._1, t._2, t._3)
   /**
-  * Create a Vec3 from the given spherical coordinates. r is the radius, t is the azimuth angle (synonymous with theta in Vec2),
-  * and angleZ is the elevation angle (also called latitude), generally ranging from -PI/2 (for the negative Z axis) to PI/2 (for the positive Z axis)
-  *
+  * Create a Vec3 from the given spherical coordinates.
+  * r is the radius, ranged [0 to infinity)
+  * t is the azimuth angle (synonymous with theta in Vec2), usually ranged [-PI to PI] or [0 to TWO_PI]
+  * angleZ is the elevation angle (also called latitude), ranged [-PI/2 (for the negative Z axis) to PI/2 (for the positive Z axis)]
   */
   def fromSpherical(r:Float, t:Float, angleZ:Float) = Vec3(r*cos(t)*cos(angleZ), r*sin(t)*cos(angleZ), r*sin(angleZ))
 
