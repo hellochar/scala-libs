@@ -4,16 +4,14 @@ import collection.mutable._
 import action.RunawayAction
 import org.zhang.lib.world.particle.Particle
 import processing.core.PApplet
-import org.zhang.lib.misc.Vec2
+import org.zhang.geom.Vec2
 
 /**
  * Created by IntelliJ IDEA.
  * User: hellochar
  * Date: Apr 10, 2011
  * Time: 1:38:57 AM
- * To change this template use File | Settings | File Templates.
  */
-
 //Operations i want are add, remove, and iterator. Optimally I'd say "trait World extends Iterable[Particle] with Addable with Subtractable, but the last two traits have some fucked up self-type stuff that I can't deal with now
 
 trait World extends Set[Entity] {

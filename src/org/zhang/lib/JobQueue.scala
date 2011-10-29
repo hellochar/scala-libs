@@ -7,9 +7,7 @@ import collection.immutable.Queue
  * User: hellochar
  * Date: 6/13/11
  * Time: 10:05 PM
- * To change this template use File | Settings | File Templates.
  */
-
 object JobQueue {
   val VERSION = "0.1.1.1"
 

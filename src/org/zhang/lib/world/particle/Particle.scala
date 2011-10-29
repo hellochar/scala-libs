@@ -1,7 +1,7 @@
 package org.zhang.lib.world.particle
 
 import processing.core.PApplet
-import org.zhang.lib.misc.Vec2
+import org.zhang.geom.Vec2
 import org.zhang.lib.world._
 import org.zhang.lib.world.action.Action
 

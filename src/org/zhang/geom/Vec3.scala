@@ -1,4 +1,4 @@
-package org.zhang.lib.misc
+package org.zhang.geom
 
 import math._
 
@@ -41,15 +41,15 @@ object Vec3 {
 case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) with PartiallyOrdered[Vec3] {
 
   implicit def d2f(d:Double) = d.toFloat
-  def tryCompareTo[B >: Vec3](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]) = {
+  def tryCompareTo[B >: Vec3](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]) =
     if(that.isInstanceOf[Vec3]) {
       val other = that.asInstanceOf[Vec3]
       if(x < other.x && y < other.y && z < other.z) Some(-1)
       else if(x == other.x && y == other.y && z == other.z) Some(0)
       else if(x > other.x && y > other.y && z > other.z) Some(1)
+      else None
     }
-    None
-  }
+    else None
 
   lazy val mag2 = x*x+y*y+z*z
   lazy val mag = sqrt(mag2).toFloat
@@ -80,6 +80,11 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
 
   lazy val unary_- = Vec3(-x, -y, -z)
 
+  /**
+   * Projects this Vec3 onto the given vector v. The resulting vector will point in v's
+   * direction.
+   * @param v Vec3 to project myself onto.
+   */
   def proj(v:Vec3) = v * (dot(v)/(v.mag2))
   def angleBetween(v:Vec3) = math.acos(dot(v)/(v.mag*mag)).toFloat
   def cross(other:Vec3) = Vec3(y*other.z - other.y*z, - (x*other.z - other.x*z),  x*other.y - other.x*y)
@@ -96,16 +101,11 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
 
   override def clone = Vec3(x, y, z)
 
-  lazy val normal, norm, normalize, normalized = this / mag;
   /**Aliases for "normalize".
   */
+  lazy val normal, norm, normalize, normalized = if(mag == 0) this else this / mag;
 
   val translate = this.+
   def scale = * _
 //  def rotate(t:Float) = {val ct = cos(t); val st = sin(t); Vec2(ct*x-st*y, st*x+ct*y) }
-
-  def invR2(k:Float, other:Vec3) = {
-      val offset = other - this;
-      (offset.normalize * k) / offset.mag2
-  }
 }

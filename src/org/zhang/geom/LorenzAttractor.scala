@@ -1,4 +1,4 @@
-package org.zhang.lib.misc
+package org.zhang.geom
 
 /**
  * Created by IntelliJ IDEA.

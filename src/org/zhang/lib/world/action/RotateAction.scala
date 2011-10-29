@@ -7,9 +7,7 @@ import org.zhang.lib.world.particle.Particle
  * User: hellochar
  * Date: Apr 10, 2011
  * Time: 1:38:57 AM
- * To change this template use File | Settings | File Templates.
  */
-
 case class RotateAction(var atuPerRot:Float = 60/*atu*/) extends ClosestParticleAction {
 
   def applyClosest(p:Particle, closest:Particle) = {

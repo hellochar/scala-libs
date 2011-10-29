@@ -4,7 +4,7 @@
  * Date: 7/12/11
  * Time: 3:06 PM
  */
-package parse.float
+package org.zhang.parse.float
 
 import java.io.{InputStreamReader, BufferedReader}
 import scala.util.parsing.combinator._

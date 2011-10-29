@@ -2,7 +2,7 @@ package org.zhang.lib.world.action
 
 import collection.mutable._
 import org.zhang.lib.world.particle.Particle
-import org.zhang.lib.misc.Vec2
+import org.zhang.geom.Vec2
 import org.zhang.lib.world.{Location, Entity, Movable}
 
 trait Action extends ((Particle) => Any)

@@ -1,4 +1,4 @@
-package org.zhang.lib.misc
+package org.zhang.lib
 
 import collection.{SeqProxy, SeqLike}
 

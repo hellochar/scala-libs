@@ -1,4 +1,4 @@
-package org.zhang.lib
+package org.zhang
 
 import java.io.{PrintWriter, FileWriter}
 

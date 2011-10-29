@@ -13,7 +13,7 @@ package object lib {
   * Returns a memoized version of the given function that does naive caching of key-value pairs.
   */
   def memoize[A, B](f: A => B) = {
-    val cache = collection.mutable.WeakHashMap[A, B]() //hmmm?
+    val cache = collection.mutable.WeakHashMap[A, B]() //WeakHashMap?
     ((a: A) => cache.getOrElseUpdate(a, f(a)), cache)
   }
 
@@ -35,7 +35,7 @@ package object lib {
   def average(s:collection.GenTraversableOnce[Int]) = s.sum / s.size;
   
   //selects a random element from the iterable.
-  def random[A](e:Iterable[A]) = e.view.drop((math.random*e.size).toInt).first
+  def random[A](e:Iterable[A]) = e.view.drop((math.random*e.size).toInt).head
 
   def powerset[X](xs: Set[X]) = (Set(Set.empty[X]) /: xs) ((xss, x) => xss ++ xss.map(_ + x))
   
@@ -53,7 +53,7 @@ package object lib {
   }
 
   /**
-  * Times the evaluation of a method using System.nanoTime and returns (result, milliseconds)
+  * Times the evaluation of a method using System.nanoTime and returns (result, nanoseconds)
   */
    def time[A](f: => A) = {
     val before = System.nanoTime()
@@ -65,7 +65,7 @@ package object lib {
   /**
   * Evaulates the function some number of times and returns a seq of the nanoseconds spent evaluating each time.
   */
-  def repeat[A](f: => A, times:Int = 1) = for(i <- 0 until times) yield time(f)._2
+  def times[A](f: => A, times:Int = 1) = for(i <- 0 until times) yield time(f)._2
 
   def fastForeach[T, U](seq:Seq[T], func:T => U) {
     var i = 0;

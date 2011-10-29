@@ -1,6 +1,7 @@
-package org.zhang.lib
+package org.zhang
+package lib
 
-import misc.Vec2
+import geom.Vec2
 import processing.core.PApplet
 
 /**

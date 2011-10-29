@@ -1,6 +1,6 @@
 package org.zhang.lib.world
 
-import org.zhang.lib.misc._
+import org.zhang.geom._
 import particle.Particle
 import processing.core.PApplet
 import collection.mutable._
@@ -10,9 +10,7 @@ import collection.mutable._
  * User: hellochar
  * Date: Apr 10, 2011
  * Time: 1:38:57 AM
- * To change this template use File | Settings | File Templates.
  */
-
 trait ForceField extends Entity {
   override val drawPriority = 2f;
   
@@ -34,15 +32,23 @@ trait GoTowards extends ForceField with Location {
 //    val force = (offset * power) / offset.mag2;
 //    if(force.mag2 > 100*100) force.setMag(100)
 //    else force;
-    offset.setMag(power)
+    offset ofMag power
   }
 
 }
 
 trait GravitationalField extends Location with ForceField {
   def power:Float
-
-  def forceFor(p: Forceable) = loc.invR2(power, p.loc)
+  /**
+  * Returns a vector that is inversely proportional to the square of the distance between this vector and the given vector, scaled with the k factor,
+  * and pointing towards the given vector.
+  */
+  def invR2(loc:Vec2, other:Vec2) = {
+      val offset = other - loc;
+      offset.normalize / offset.mag2
+  }
+  
+  def forceFor(p: Forceable) = invR2(loc, p.loc) * power
 }
 
 case class Drag(w:World, constant:Float = .01f) extends Entity(w) with ForceField {

@@ -1,4 +1,4 @@
-package org.zhang.lib.misc
+package org.zhang.geom
 
 import math._
 
@@ -36,8 +36,9 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
       if(x < other.x && y < other.y) Some(-1)
       else if(x == other.x && y == other.y) Some(0)
       else if(x > other.x && y > other.y) Some(1)
+      else None
     }
-    None
+    else None
   }
 
   def mag2 = x*x+y*y
@@ -73,15 +74,15 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
 
   /** Consider the Vec2 required to "move" this vector to v. angleTo returns the angle, in radians, of that Vec2.
    */
-  def angleTo(v:Vec2) = (v - this) angle
+  def angleTo(v:Vec2) = (v - this).angle
 
   /** Consider the Vec2 required to "move" this vector to v. distTo returns the magnitude of that Vec2.
    */
-  def distTo(v:Vec2) = (v - this) mag
+  def distTo(v:Vec2) = (v - this).mag
 
   override def clone = Vec2(x, y)
 
-  def normalize = this / mag;
+  def normalize = if(mag == 0) this else this / mag;
   /**Aliases for "normalize".
   */
   val normal, norm, normalized = normalize _
@@ -90,12 +91,4 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   def scale = * _
   def rotate(rad:Float) = {val ct = cos(rad); val st = sin(rad); Vec2((ct*x-st*y).toFloat, (st*x+ct*y).toFloat) }
 
-  /**
-  * Returns a vector that is inversely proportional to the square of the distance between this vector and the given vector, scaled with the k factor,
-  * and pointing towards the given vector.
-  */
-  def invR2(k:Float, other:Vec2) = {
-      val offset = other - this;
-      (offset.normalize * k) / offset.mag2
-  }
 }
