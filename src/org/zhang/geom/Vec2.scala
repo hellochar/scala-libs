@@ -18,6 +18,10 @@ object Vec2 {
   def apply():Vec2 = ZERO
   def apply(t: Float):Vec2 = Vec2(t, t)
   def apply(t: (Float, Float)):Vec2 = this(t._1, t._2)
+
+  def random = fromPolar(1, math.random*TWO_PI);
+
+
   def fromPolar(radius:Float, theta:Float) = Vec2(radius*cos(theta), radius*sin(theta))
 
   lazy val magOrdering = Ordering.by((v:Vec2) => v.mag2)
@@ -60,8 +64,8 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
 
   def doToBoth(f:(Float, Float) => Float)(v:Vec2) = Vec2(f(x, v.x), f(y, v.y))
 
-  val + = doToBoth(_+_) _
-  val - = doToBoth(_-_) _
+  def +(v:Vec2) = Vec2(x + v.x, y + v.y)
+  def -(v:Vec2) = Vec2(x - v.x, y - v.y)
   def *(n:Float) = Vec2(x*n, y*n)
   def /(n:Float) = Vec2(x/n, y/n)
 
@@ -83,12 +87,17 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   override def clone = Vec2(x, y)
 
   def normalize = if(mag == 0) this else this / mag;
-  /**Aliases for "normalize".
-  */
-  val normal, norm, normalized = normalize _
 
-  val translate = this.+
-  def scale = * _
+  def translate(v:Vec2) = this + v
+  def scale(s:Float) = this * s
   def rotate(rad:Float) = {val ct = cos(rad); val st = sin(rad); Vec2((ct*x-st*y).toFloat, (st*x+ct*y).toFloat) }
 
+  def xy = Vec3(x, y, 0)
+  def xz = Vec3(x, 0, y)
+  def yz = Vec3(0, x, y)
+
+  /**
+   * Interprets this Vec2 as a point on the subspace spanned by vx and vy.
+   */
+  def onPlane(vx:Vec3, vy:Vec3) = vx * x + vy * y;
 }
