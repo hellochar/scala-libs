@@ -10,7 +10,8 @@ package org.zhang
 package object lib {
 
   /**
-  * Returns a memoized version of the given function that does naive caching of key-value pairs.
+  * Creates a naively cached memoized version of the given function, and then returns tuple (function, cache)
+   * @return The tuple (Memoized function, memoized function's cache)
   */
   def memoize[A, B](f: A => B) = {
     val cache = collection.mutable.WeakHashMap[A, B]() //WeakHashMap?
@@ -20,8 +21,13 @@ package object lib {
   def interleave[A](s1:Stream[A], s2:Stream[A]):Stream[A] = Stream.cons(s1.head, Stream.cons(s2.head, interleave(s1.tail, s2.tail)))
   def partialSum[T](s:Stream[T])(implicit n:Numeric[T]) = {var k = n.zero; val m = new AnyRef(); s.map(i => m.synchronized{k = n.plus(k, i); k})} //!not thread safe!
   def partialDif[T](s:Stream[T])(implicit n:Numeric[T]) = s.sliding(2).toStream.map{ case a #:: b #:: Stream.Empty => n.minus(b, a) }
+
+  /**
+   * If s = [1, 2, 3, 4, 5, ...], <br />
+   * then partials(s) = [[1], [1, 2], [1, 2, 3], [1, 2, 3, 4], ...]
+   */
   def partials[A](s:Stream[A]) = {
-    def build(start:Stream[A], rest:Stream[A]):Stream[Stream[A]] = rest match {
+    def build(start:Stream[A], rest:Stream[A]):Stream[Stream[A]] = rest match { //todo: maybe a way to make this faster? matching is slow
       case a #:: b => {
         val s = start :+ a;
         Stream.cons(s, build(s, b))

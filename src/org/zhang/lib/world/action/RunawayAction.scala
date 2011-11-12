@@ -15,14 +15,9 @@ import org.zhang.geom.Vec2
 */
 case class RunawayAction(var pow:Float = 15) extends ClosestParticleAction {
 
-  def invR2(loc:Vec2, other:Vec2) = {
-      val offset = other - loc;
-      offset.normalize / offset.mag2
-  }
-
   def applyClosest(p: Particle, closest:Particle) = {
     //Find the closest particle and run away
-    val force = invR2(closest.loc, p.loc) * pow
+    val force = Vec2.invR2(closest.loc, p.loc) * pow
     if(force.x.isNaN || force.y.isNaN)
       println("got nan!")
     p.addForce(force)

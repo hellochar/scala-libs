@@ -21,16 +21,24 @@ object Vec2 {
 
   def random = fromPolar(1, math.random*TWO_PI);
 
-
   def fromPolar(radius:Float, theta:Float) = Vec2(radius*cos(theta), radius*sin(theta))
 
-  lazy val magOrdering = Ordering.by((v:Vec2) => v.mag2)
+  /**
+  * Returns a vector representing the gravitational force between two bodies located at v1 and v2 (with a gravitational constant of 1).
+  */
+  def invR2(v1:Vec2, v2:Vec2) = {
+    val o = v1 - v2;
+    o.normalize / o.mag2
+  }
 
-  lazy val ZERO = Vec2(0, 0)
-  lazy val X = Vec2(1, 0)
-  lazy val Y = Vec2(0, 1)
+  val magOrdering = Ordering.by((v:Vec2) => v.mag2)
+
+  val ZERO = Vec2(0, 0)
+  val X = Vec2(1, 0)
+  val Y = Vec2(0, 1)
 }
 
+//todo: update to reflect changes to vec3
 case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrdered[Vec2] {
 
   implicit def d2f(d:Double) = d.toFloat
@@ -45,9 +53,9 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
     else None
   }
 
-  def mag2 = x*x+y*y
-  def mag = sqrt(mag2).toFloat
-  def angle = atan2(y, x).toFloat
+  val mag2 = x*x+y*y
+  val mag = sqrt(mag2).toFloat
+  val angle = atan2(y, x).toFloat
 
   @deprecated("use ofMag instead")
   def mag_=(m:Float) = normalize * m;
@@ -69,9 +77,9 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   def *(n:Float) = Vec2(x*n, y*n)
   def /(n:Float) = Vec2(x/n, y/n)
 
-  def dot(v:Vec2) = x*v.x+y*v.y
-
   def unary_- = Vec2(-x, -y)
+
+  def dot(v:Vec2) = x*v.x+y*v.y
 
   def proj(v:Vec2) = v * (dot(v)/(v.mag2))
   def angleBetween(v:Vec2) = math.acos(dot(v)/(v.mag*mag)).toFloat
@@ -83,6 +91,8 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   /** Consider the Vec2 required to "move" this vector to v. distTo returns the magnitude of that Vec2.
    */
   def distTo(v:Vec2) = (v - this).mag
+
+  def isZero = Vec2.ZERO == this
 
   override def clone = Vec2(x, y)
 
@@ -97,7 +107,7 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   def yz = Vec3(0, x, y)
 
   /**
-   * Interprets this Vec2 as a point on the subspace spanned by vx and vy.
+   * Interprets this Vec2 as a point on the subspace spanned by vX and vY.
    */
-  def onPlane(vx:Vec3, vy:Vec3) = vx * x + vy * y;
+  def as3D(vX:Vec3, vY:Vec3) = vX * x + vY * y;
 }

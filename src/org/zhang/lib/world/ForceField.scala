@@ -39,16 +39,8 @@ trait GoTowards extends ForceField with Location {
 
 trait GravitationalField extends Location with ForceField {
   def power:Float
-  /**
-  * Returns a vector that is inversely proportional to the square of the distance between this vector and the given vector, scaled with the k factor,
-  * and pointing towards the given vector.
-  */
-  def invR2(loc:Vec2, other:Vec2) = {
-      val offset = other - loc;
-      offset.normalize / offset.mag2
-  }
-  
-  def forceFor(p: Forceable) = invR2(loc, p.loc) * power
+
+  def forceFor(p: Forceable) = Vec2.invR2(loc, p.loc) * power
 }
 
 case class Drag(w:World, constant:Float = .01f) extends Entity(w) with ForceField {

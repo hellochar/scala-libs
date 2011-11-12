@@ -30,7 +30,7 @@ object Vec3 {
       import math.{random => rand}
       v = Vec3(rand*2-1, rand*2-1, rand*2-1)
     }while(v.mag2 > 1);
-    v normalize
+    v.normalize
   }
   /**
   * Create a Vec3 from the given spherical coordinates.
@@ -43,12 +43,20 @@ object Vec3 {
   @deprecated("Use fromSpherical(r, t, angleZ) instead")
   def fromPolar(r:Float, t:Float, angleZ:Float) = fromSpherical(r, t, angleZ)
 
-  lazy val magOrdering = Ordering.by((v:Vec3) => v.mag2)
+  /**
+  * Returns a vector representing the gravitational force between two bodies located at v1 and v2 (with a gravitational constant of 1).
+  */
+  def invR2(v1:Vec3, v2:Vec3) = {
+    val o = v1 - v2;
+    o.normalize / o.mag2
+  }
 
-  lazy val ZERO = Vec3(0, 0, 0)
-  lazy val X = Vec3(1, 0, 0)
-  lazy val Y = Vec3(0, 1, 0)
-  lazy val Z = Vec3(0, 0, 1)
+  val magOrdering = Ordering.by((v:Vec3) => v.mag2)
+
+  val ZERO = Vec3(0, 0, 0)
+  val X = Vec3(1, 0, 0)
+  val Y = Vec3(0, 1, 0)
+  val Z = Vec3(0, 0, 1)
 }
 
 case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) with PartiallyOrdered[Vec3] {
@@ -64,10 +72,10 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
     }
     else None
 
-  lazy val mag2 = x*x+y*y+z*z
-  lazy val mag = sqrt(mag2).toFloat
-  lazy val angle = atan2(y, x).toFloat
-  lazy val angleZ = atan2(z, mag).toFloat
+  val mag2 = x*x+y*y+z*z
+  val mag = sqrt(mag2).toFloat
+  val angle = atan2(y, x).toFloat
+  val angleZ = atan2(z, mag).toFloat
 
   /**
    * If this vector is the zero vector, this method returns itself. Otherwise, returns a vector in the same
@@ -94,12 +102,13 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
    * @param v Vec3 to project myself onto.
    */
   def proj(v:Vec3) = if(isZero || v.isZero) Vec3.ZERO else (v * (dot(v)/(v.mag2)))
-
   /**
    * Precondition: norm is not the zero vector.
    * This projects v onto the plane described by the norm.
    */
   def projPlane(norm:Vec3) = this - (this proj norm)
+
+
   def angleBetween(v:Vec3) = if(isZero || v.isZero) 0f else {
     /* Floating point rounding errors can accumulate and make the numerator greater than the denominator
      * which then makes math.acos return NaN. (e.g. this dot v = 100.0, this.mag = .9999994, b.mag = 100.0).
@@ -125,8 +134,6 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
 
   override def clone = Vec3(x, y, z)
 
-  /**Alias for "normalize".
-  */
   def normalize = if(mag == 0) this else this / mag;
 
   /**
@@ -139,12 +146,30 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
    */
   def scale(s:Float) = this * s
 
-
-
-//  def rotate(t:Float) = {val ct = cos(t); val st = sin(t); Vec2(ct*x-st*y, st*x+ct*y) }
+  /**
+   * Precondition: axis is not the zero vector. <br />
+   * Returns this vector rotated theta radians around the axis vector. axis must be of unit length.
+   * @param axis Axis of rotation
+   * @param theta Radians to rotate
+   */
+  def rotate(axis:Vec3, theta:Float) = //what if axis is zero? then this formula reduces to this * cos(theta) + 0 + 0 = this * cos(theta), definitely not what we want.
+    this * cos(theta) + (axis cross this) * sin(theta) + axis * (axis.dot(this) * (1 - cos(theta)))
 
   /**
    * Returns true if all components of this vector have less length than epsilon.
    */
   def withinBounds(epsilon:Float) = abs(x) < epsilon && abs(y) < epsilon && abs(z) < epsilon;
+  /**
+   * Precondition: vX and vY are linearly independent, v is on the plane spanned by vX and vY, vX and vY are orthogonal.
+   * Given a vector v on a plane spanned by vX and vY, this method decomposes that vector into its vX and vY components,
+   * returning the value in a Vec2.
+   * This method is a general bridge to the Vec2 class, and is the "inverse" of Vec2.as3D(vX, vY).
+   */
+  def as2D(vX:Vec3, vY:Vec3) = {
+//    if(math.abs(vX dot vY) > .01f) sys.error("vX not ortho to vY! "+vX+", "+vY+", "+vX.dot(vY)) //todo: get rid of error checking?
+//    if(!proj(vX cross vY).withinBounds(.01f)) sys.error("v is not on the plane spanned by vX, vY! "+vX+", "+vY+", "+proj(vX cross vY))
+    //since they're orthogonal, we just have to do a projection
+    //v = x1 * v1 + x2 * v2; v . v1 = x1 * v1 . v1 + 0 => x1 = v . v1 / (v1 . v1)
+    Vec2(dot(vX) / vX.mag2, dot(vY)/ vY.mag2)
+  }
 }
