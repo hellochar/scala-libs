@@ -109,6 +109,10 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
   def projPlane(norm:Vec3) = this - (this proj norm)
 
 
+  /**
+   * Returns the angle between this vector and the given vector. The value returned will always be in the range
+   * [0, PI]
+   */
   def angleBetween(v:Vec3) = if(isZero || v.isZero) 0f else {
     /* Floating point rounding errors can accumulate and make the numerator greater than the denominator
      * which then makes math.acos return NaN. (e.g. this dot v = 100.0, this.mag = .9999994, b.mag = 100.0).

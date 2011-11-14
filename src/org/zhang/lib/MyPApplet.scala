@@ -37,8 +37,8 @@ trait MyPApplet extends PApplet with HasMV {
   def translate(t:(Float, Float)) { translate(t._1, t._2) }
   def translate(t:(Float, Float, Float)) { translate(t._1, t._2, t._3) }
 
-  def lines3(list:Traversable[Vec3]) { beginShape(); list.foreach(vertex _); endShape(); }
-  def lines2(list:Traversable[Vec2]) { beginShape(); list.foreach(vertex _); endShape(); } //:( type erasure ftl
+  def lines3(list:Traversable[Vec3], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); }
+  def lines2(list:Traversable[Vec2], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); } //:( type erasure ftl
 
   def pointLight(c1:Int, c2:Int, c3:Int, loc:(Float, Float, Float)) { pointLight(c1, c2, c3, loc._1, loc._2, loc._3) }
 
@@ -63,7 +63,7 @@ trait MyPApplet extends PApplet with HasMV {
   def angle(ang:Float, rad:Float = 100) {
     val nAng = if(ang > TWO_PI) ang % TWO_PI else if(ang < -TWO_PI) -(-ang % TWO_PI) else ang
     if(nAng < 0) arc(0, 0, rad, rad, nAng, 0)
-    else arc(0, 0, rad, rad, 0, nAng)
+    else arc(0, 0, rad*2, rad*2, 0, nAng)
   }
 
 //  def fore(r:Iterator[_])(t: => Unit) { r.foreach(_ => t) }
