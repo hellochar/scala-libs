@@ -92,9 +92,9 @@ class ExprParser(
 
   /**
   * could definitely do some caching. Unless the function you're pointing to is some mutable container type...?
+  * User Defined function.
   */
-  case class UDFunc(name:String, e:Expr) extends Unary(e) {
-    override def func = funcs(name)
+  case class UDFunc(name:String, e:Expr) extends Unary(e, funcs(name)) {
     override def toString = name+"("+e+")"
   }
 
