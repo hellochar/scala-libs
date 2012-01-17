@@ -3,7 +3,6 @@ package lib
 
 import geom._
 import processing.core._
-import controlP5._
 
 /**
 * Created by IntelliJ IDEA.
@@ -37,17 +36,33 @@ trait MyPApplet extends PApplet with HasMV {
   def translate(t:(Float, Float)) { translate(t._1, t._2) }
   def translate(t:(Float, Float, Float)) { translate(t._1, t._2, t._3) }
 
+  /**
+   * Draws the list of vec3's in a beginShape/endShape pair
+   */
   def lines3(list:Traversable[Vec3], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); }
-  def lines2(list:Traversable[Vec2], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); } //:( type erasure ftl
+
+  /**
+   * Draws the list of vec2's in a beginShape/endShape pair
+   */
+  def lines2(list:Traversable[(Float, Float)], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); } //:( type erasure ftl
 
   def pointLight(c1:Int, c2:Int, c3:Int, loc:(Float, Float, Float)) { pointLight(c1, c2, c3, loc._1, loc._2, loc._3) }
 
   /**
-   * This method rotates the current coordinate system such that the given vector a is aligned with the vector b.
+   * Rotates the current coordinate system such that the given vector a is aligned with the vector b.
    */
   def rotateAtoB(a:Vec3, b:Vec3) { applyMatrix(P5Util.rotateAtoBMat(a, b)) }
 
+  /**
+   * Draw a horizontal line at the given y coordinate
+   * @param y
+   */
   def horiz(y:Int) = line(0, y, width, y)
+
+  /**
+   * Draw a vertical line at the given x coordinate
+   * @param x
+   */
   def vert(x:Int) = line(x, 0, x, height)
 
   /**
@@ -68,25 +83,61 @@ trait MyPApplet extends PApplet with HasMV {
 
 //  def fore(r:Iterator[_])(t: => Unit) { r.foreach(_ => t) }
 
+  /**
+   * Generates a random integer in the range [low, high]. Both ends are inclusive.
+   */
   def randi(low:Int, high:Int) = random(low, high+1).toInt
+
+  /**
+   * Generates a random integer in the range [0, high].
+   */
   def randi(high:Int):Int = randi(0, high)
+
+  /**
+   * Generates a random integer in the range [0, 1].
+   */
   def randi():Int = randi(1)
+
+  /**
+   * Translates by the specified vector and then takes the given action; this method automatically saves the current matrix with push/popMatrix.
+   * @param v Vector to translate by
+   * @param action Action to take
+   * @tparam A
+   * @return
+   */
+  def at[A](v: Vec3)(action: => A) {
+    at(v.x, v.y, v.z)(action)
+  }
+
+  /**
+   * Translates by the specified coordinates and then takes the given action; this method automatically saves the current matrix with push/popMatrix.
+   * @param x x coordinate
+   * @param y y coordinate
+   * @param z z coordinate
+   * @param action action to take
+   * @tparam A
+   * @return
+   */
+  def at[A](x: Float, y: Float, z: Float)(action: => A) = matrix {
+    translate(x, y, z)
+    action
+  }
+
+  /**
+   * Perform the given action surrounded in a push/popMatrix
+   * @param action
+   * @tparam A
+   */
+  def matrix[A](action: => A) {
+    pushMatrix()
+    action
+    popMatrix()
+  }
+
 
   /**
    * Generates a color with fields all filled in with random(255).
    */
   def randomColor = color(random(255), random(255), random(255))
 
-  def cp5HasMouse(cp5:ControlP5) = {
-    def inCI(p:ControllerInterface) = zhang.Methods.isInRange(new PVector(mouseX, mouseY), p.getAbsolutePosition,
-      PVector.add(p.getAbsolutePosition, new PVector(p.getWidth, p.getHeight))
-    ) //>_< SO MUCH BOILING
-
-    cp5.getControllerList.exists(inCI _);
-  }
-
-  def cp5HasFocus(cp5:ControlP5) = cp5.getControllerList.exists(_ match {
-    case c: Textfield => c.isFocus
-    case _ => false
-  })
 }
