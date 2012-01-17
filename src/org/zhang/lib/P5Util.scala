@@ -120,9 +120,11 @@ object P5Util {
   }
 
   /**
-   * Returns a rotation matrix that transforms the unit a vector into the unit b vector.
-   * @param a Input vector
-   * @param b Output vector
+   * Returns a rotation matrix that transforms the unit a vector into the unit b vector. This method makes no
+   * guarantees about the direction in which the other basis vectors may be pointing other than that they will still
+   * be orthogonal.
+   * @param a non-zero input vector; doesn't have to be normalized
+   * @param b non-zero output vector; doesn't have to be normalized
    * @return A PMatrix3D object that gives the output vector, given the input vector.
    */
   def rotateAtoBMat(a:Vec3, b:Vec3) = { //todo: what if a is zero? what if b is zero?
