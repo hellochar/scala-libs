@@ -19,6 +19,9 @@ object Vec2 {
   def apply(t: Float):Vec2 = Vec2(t, t)
   def apply(t: (Float, Float)):Vec2 = this(t._1, t._2)
 
+  /**
+   * Returns a vector of magnitude 1 and random angle.
+   */
   def random = fromPolar(1, math.random*TWO_PI);
 
   def fromPolar(radius:Float, theta:Float) = Vec2(radius*cos(theta), radius*sin(theta))
@@ -82,6 +85,7 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   def dot(v:Vec2) = x*v.x+y*v.y
 
   def proj(v:Vec2) = v * (dot(v)/(v.mag2))
+  def cross(v:Vec2) = x*v.y - y*v.x
   def angleBetween(v:Vec2) = math.acos(dot(v)/(v.mag*mag)).toFloat
 
   /** Consider the Vec2 required to "move" this vector to v. angleTo returns the angle, in radians, of that Vec2.
@@ -102,6 +106,7 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
   def scale(s:Float) = this * s
   def rotate(rad:Float) = {val ct = cos(rad); val st = sin(rad); Vec2((ct*x-st*y).toFloat, (st*x+ct*y).toFloat) }
 
+
   def xy = Vec3(x, y, 0)
   def xz = Vec3(x, 0, y)
   def yz = Vec3(0, x, y)
@@ -110,4 +115,6 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
    * Interprets this Vec2 as a point on the subspace spanned by vX and vY.
    */
   def as3D(vX:Vec3, vY:Vec3) = vX * x + vY * y;
+
+  def withZ(z:Float) = Vec3(x, y, z)
 }

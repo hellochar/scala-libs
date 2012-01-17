@@ -120,7 +120,7 @@ object P5Util {
   }
 
   /**
-   * Returns a rotation matrix that transforms the a vector into the b vector.
+   * Returns a rotation matrix that transforms the unit a vector into the unit b vector.
    * @param a Input vector
    * @param b Output vector
    * @return A PMatrix3D object that gives the output vector, given the input vector.

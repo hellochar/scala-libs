@@ -8,7 +8,7 @@ import collection.immutable.Queue
  * Date: 6/13/11
  * Time: 10:05 PM
  */
-object JobQueue {
+class JobQueue {
   val VERSION = "0.1.1.1"
 
   private type Job = Any
