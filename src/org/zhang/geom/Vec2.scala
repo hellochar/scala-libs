@@ -20,9 +20,16 @@ object Vec2 {
   def apply(t: (Float, Float)):Vec2 = this(t._1, t._2)
 
   /**
-   * Returns a vector of magnitude 1 and random angle.
+   * Returns a vector of random magnitude between [0, 1] and random angle.
    */
-  def random = fromPolar(1, math.random*TWO_PI);
+  def random = fromPolar(math.random, math.random*TWO_PI);
+
+  /**
+   * Returns a vector with random magnitude in the range [0, rad] and random angle.
+   * @param rad
+   * @return
+   */
+  def random(rad:Float):Vec2 = random * rad
 
   def fromPolar(radius:Float, theta:Float) = Vec2(radius*cos(theta), radius*sin(theta))
 

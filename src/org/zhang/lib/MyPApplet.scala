@@ -81,7 +81,9 @@ trait MyPApplet extends PApplet with HasMV {
       cntrol2._1, cntrol2._2, cntrol2._3,
       anchor2._1, anchor2._2, anchor2._3)
   }
-  def pointLight(c1:Int, c2:Int, c3:Int, loc:(Float, Float, Float)) { pointLight(c1, c2, c3, loc._1, loc._2, loc._3) }
+  def pointLight(c1:Float, c2:Float, c3:Float, loc:(Float, Float, Float)) { pointLight(c1, c2, c3, loc._1, loc._2, loc._3) }
+  def directionalLight(c1:Float, c2:Float, c3:Float, dir:(Float, Float, Float)) { directionalLight(c1, c2, c3, dir._1, dir._2, dir._3) }
+  def ambientLight(c1:Float, c2:Float, c3:Float, dir:(Float, Float, Float)) { ambientLight(c1, c2, c3, dir._1, dir._2, dir._3) }
   //------------------------------------
 
 

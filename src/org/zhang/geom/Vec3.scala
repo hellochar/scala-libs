@@ -75,7 +75,7 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
   val mag2 = x*x+y*y+z*z
   val mag = sqrt(mag2).toFloat
   val angle = atan2(y, x).toFloat
-  val angleZ = atan2(z, mag).toFloat
+  val angleZ = -acos(z/mag).toFloat+PI/2
 
   /**
    * If this vector is the zero vector, this method returns itself. Otherwise, returns a vector in the same

@@ -58,6 +58,8 @@ package object lib {
     def apply(t0: T0, t1: T1, t2: T2) = func(t0, t1, t2)
   }
 
+  def map(value:Float, istart:Float, istop:Float, ostart:Float, ostop:Float) = ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+
   /**
   * Times the evaluation of a method using System.nanoTime and returns (result, nanoseconds)
   */
