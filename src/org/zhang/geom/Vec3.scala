@@ -21,16 +21,16 @@ object Vec3 {
   def apply(t: (Float, Float, Float)):Vec3 = Vec3(t._1, t._2, t._3)
 
   /**
-   * Returns a Vec3 with a random longitude and latitude on the unit sphere.
+   * Returns a Vec3 with a random longitude and latitude, and random magnitude in the range (0, 1).
    */
   def random = {
     //fromSpherical(1, math.random*TWO_PI, (math.random - .5) * PI ) <- this gives a bias at the poles
     var v:Vec3 = null;
+    import math.{random => rand}
     do{
-      import math.{random => rand}
       v = Vec3(rand*2-1, rand*2-1, rand*2-1)
     }while(v.mag2 > 1);
-    v.normalize
+    v ofMag rand
   }
   /**
   * Create a Vec3 from the given spherical coordinates.
@@ -51,7 +51,7 @@ object Vec3 {
     o.normalize / o.mag2
   }
 
-  val magOrdering = Ordering.by((v:Vec3) => v.mag2)
+  val magOrdering = Ordering.by((_:Vec3).mag2)
 
   val ZERO = Vec3(0, 0, 0)
   val X = Vec3(1, 0, 0)
@@ -113,7 +113,7 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
    * Returns the angle between this vector and the given vector. The value returned will always be in the range
    * [0, PI]
    */
-  def angleBetween(v:Vec3) = if(isZero || v.isZero) 0f else {
+  def angleBetween(v:Vec3) = if(isZero || v.isZero) 0f else { //we shouldn't be returning 0f here. It should actually be None
     /* Floating point rounding errors can accumulate and make the numerator greater than the denominator
      * which then makes math.acos return NaN. (e.g. this dot v = 100.0, this.mag = .9999994, b.mag = 100.0).
      * If the fraction is ever greater than 1, just assume that the division actually equals one and return 0.
@@ -139,11 +139,6 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
   override def clone = Vec3(x, y, z)
 
   def normalize = if(mag == 0) this else this / mag;
-
-  /**
-   * Same as +
-   */
-  def translate(v:Vec3) = this + v
 
   /**
    * Same as *
@@ -176,4 +171,6 @@ case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) 
     //v = x1 * v1 + x2 * v2; v . v1 = x1 * v1 . v1 + 0 => x1 = v . v1 / (v1 . v1)
     Vec2(dot(vX) / vX.mag2, dot(vY)/ vY.mag2)
   }
+
+  def onAxes(xAxis:Vec3, yAxis:Vec3, zAxis:Vec3) = xAxis*x + yAxis*y + zAxis*z;
 }

@@ -3,13 +3,6 @@ package org.zhang.lib
 import controlP5._
 import processing.core.{PVector, PApplet}
 
-/**
- * Created by IntelliJ IDEA.
- * User: hellochar
- * Date: 11/20/11
- * Time: 11:00 PM
- */
-
 object CP5Util {
 
   def inCP5(x:Float, y:Float, cp5:ControlP5) = {
