@@ -59,7 +59,7 @@ object Vec3 {
   val Z = Vec3(0, 0, 1)
 }
 
-case class Vec3(x:Float, y:Float, z:Float) extends (Float, Float, Float)(x,y,z) with PartiallyOrdered[Vec3] {
+case class Vec3(x:Float, y:Float, z:Float) extends PartiallyOrdered[Vec3] {
 
   implicit private def d2f(d:Double) = d.toFloat
   def tryCompareTo[B >: Vec3](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]) =

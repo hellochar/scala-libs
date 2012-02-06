@@ -16,29 +16,29 @@ trait MyPApplet extends PApplet with HasMV {
 
   //======================================OVERLOADED TUPLE METHODS==============================================
 //  implicit def ii2v2[T, U](i:(T, U))(implicit num1: Numeric[T], num2: Numeric[U]) = {
-//    (Float, Float)(num1.toFloat(i._1), num2.toFloat(i._2))
+//    Vec2(num1.toFloat(i.x), num2.toFloat(i.y))
 //  }
 
   //--------------2D Methods-------------
-  def vertex(t:(Float, Float)) { vertex(t._1, t._2) }
+  def vertex(t:Vec2) { vertex(t.x, t.y) }
 
-  def line(end:(Float, Float)) { line(0, 0, end._1, end._2) }
-  def line(start:(Float, Float), end:(Float, Float)) { line(start._1, start._2, end._1, end._2) }
+  def line(end:Vec2) { line(0, 0, end.x, end.y) }
+  def line(start:Vec2, end:Vec2) { line(start.x, start.y, end.x, end.y) }
 
-  def ellipse(center: (Float, Float), w: Float, h:Float) { ellipse(center._1, center._2, w, h) }
-  def ellipse(center: (Float, Float), d: (Float, Float)) { ellipse(center, d._1, d._2) }
+  def ellipse(center: Vec2, w: Float, h:Float) { ellipse(center.x, center.y, w, h) }
+  def ellipse(center: Vec2, d: Vec2) { ellipse(center, d.x, d.y) }
 
-  def point(p:(Float, Float)) { point(p._1, p._2) }
+  def point(p:Vec2) { point(p.x, p.y) }
 
-  def rect(corner:(Float, Float), w:Float, h:Float) { rect(corner._1, corner._2, w, h) }
-  def triangle(a:(Float, Float), b:(Float, Float), c:(Float, Float)) { triangle(a._1, a._2, b._1, b._2, c._1, c._2) }
+  def rect(corner:Vec2, w:Float, h:Float) { rect(corner.x, corner.y, w, h) }
+  def triangle(a:Vec2, b:Vec2, c:Vec2) { triangle(a.x, a.y, b.x, b.y, c.x, c.y) }
 
-  def translate(t:(Float, Float)) { translate(t._1, t._2) }
-  def scale(s:(Float, Float)) { scale(s._1, s._2) }
+  def translate(t:Vec2) { translate(t.x, t.y) }
+  def scale(s:Vec2) { scale(s.x, s.y) }
   /**
    * Draws the list of vec2's in a beginShape/endShape pair
    */
-  def lines2(list:Traversable[(Float, Float)], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); }
+  def lines2(list:Traversable[Vec2], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); }
 
   //todo: arc, quad, 2D bezier, 2D curve
 
@@ -47,21 +47,21 @@ trait MyPApplet extends PApplet with HasMV {
 
 
   //------------3D Methods---------------
-  def vertex(t:(Float, Float, Float)) { vertex(t._1, t._2, t._3) }
+  def vertex(t:Vec3) { vertex(t.x, t.y, t.z) }
 
-  def line(end:(Float, Float, Float)) { line(0, 0, 0, end._1, end._2, end._3) }
-  def line(start:(Float, Float, Float), end:(Float, Float, Float)) { line(start._1, start._2, start._3, end._1, end._2, end._3) }
+  def line(end:Vec3) { line(0, 0, 0, end.x, end.y, end.z) }
+  def line(start:Vec3, end:Vec3) { line(start.x, start.y, start.z, end.x, end.y, end.z) }
 
-  def point(p:(Float, Float, Float)) { point(p._1, p._2, p._3) }
+  def point(p:Vec3) { point(p.x, p.y, p.z) }
 
-  def translate(t:(Float, Float, Float)) { translate(t._1, t._2, t._3) }
-  def scale(s:(Float, Float, Float)) { translate(s._1, s._2, s._3) }
-  def rotate(rad:Float, axis:(Float, Float, Float)) { rotate(rad, axis._1, axis._2, axis._3) }
+  def translate(t:Vec3) { translate(t.x, t.y, t.z) }
+  def scale(s:Vec3) { translate(s.x, s.y, s.z) }
+  def rotate(rad:Float, axis:Vec3) { rotate(rad, axis.x, axis.y, axis.z) }
 
   /**
    * Draws the list of vec3's in a beginShape/endShape pair
    */
-  def lines3(list:Traversable[(Float, Float, Float)], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); }
+  def lines3(list:Traversable[Vec3], close:Boolean = false) { beginShape(); list.foreach(vertex _); if(close) endShape(CLOSE) else endShape(); }
 
   /**
    * Draws a bezier curve through the four points specified; the curve will start at anchor1 and end at anchor2, with control points
@@ -71,19 +71,19 @@ trait MyPApplet extends PApplet with HasMV {
    * @param cntrol2 Second control
    * @param anchor2 Second anchor
    */
-  def bezier(anchor1:(Float, Float, Float),
-             cntrol1:(Float, Float, Float),
-             cntrol2:(Float, Float, Float),
-             anchor2:(Float, Float, Float)) {
+  def bezier(anchor1:Vec3,
+             cntrol1:Vec3,
+             cntrol2:Vec3,
+             anchor2:Vec3) {
     bezier(
-      anchor1._1, anchor1._2, anchor1._3,
-      cntrol1._1, cntrol1._2, cntrol1._3,
-      cntrol2._1, cntrol2._2, cntrol2._3,
-      anchor2._1, anchor2._2, anchor2._3)
+      anchor1.x, anchor1.y, anchor1.z,
+      cntrol1.x, cntrol1.y, cntrol1.z,
+      cntrol2.x, cntrol2.y, cntrol2.z,
+      anchor2.x, anchor2.y, anchor2.z)
   }
-  def pointLight(c1:Float, c2:Float, c3:Float, loc:(Float, Float, Float)) { pointLight(c1, c2, c3, loc._1, loc._2, loc._3) }
-  def directionalLight(c1:Float, c2:Float, c3:Float, dir:(Float, Float, Float)) { directionalLight(c1, c2, c3, dir._1, dir._2, dir._3) }
-  def ambientLight(c1:Float, c2:Float, c3:Float, dir:(Float, Float, Float)) { ambientLight(c1, c2, c3, dir._1, dir._2, dir._3) }
+  def pointLight(c1:Float, c2:Float, c3:Float, loc:Vec3) { pointLight(c1, c2, c3, loc.x, loc.y, loc.z) }
+  def directionalLight(c1:Float, c2:Float, c3:Float, dir:Vec3) { directionalLight(c1, c2, c3, dir.x, dir.y, dir.z) }
+  def ambientLight(c1:Float, c2:Float, c3:Float, dir:Vec3) { ambientLight(c1, c2, c3, dir.x, dir.y, dir.z) }
   //------------------------------------
 
 
@@ -109,8 +109,8 @@ trait MyPApplet extends PApplet with HasMV {
    * @tparam A
    * @return
    */
-  def at[A](v: (Float, Float, Float))(action: => A) {
-    at(v._1, v._2, v._3)(action)
+  def at[A](v: Vec3)(action: => A) {
+    at(v.x, v.y, v.z)(action)
   }
 
   /**

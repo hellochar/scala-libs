@@ -50,7 +50,7 @@ object Vec2 {
 }
 
 //todo: update to reflect changes to vec3
-case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrdered[Vec2] {
+case class Vec2(x:Float, y:Float) extends PartiallyOrdered[Vec2] {
 
   implicit def d2f(d:Double) = d.toFloat
   def tryCompareTo[B >: Vec2](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]) = {
@@ -64,9 +64,9 @@ case class Vec2(x:Float, y:Float) extends (Float, Float)(x, y) with PartiallyOrd
     else None
   }
 
-  val mag2 = x*x+y*y
-  val mag = sqrt(mag2).toFloat
-  val angle = atan2(y, x).toFloat
+  def mag2 = x*x+y*y
+  def mag = sqrt(mag2).toFloat
+  def angle = atan2(y, x).toFloat
 
   @deprecated("use ofMag instead")
   def mag_=(m:Float) = normalize * m;
