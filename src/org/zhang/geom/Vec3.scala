@@ -172,5 +172,30 @@ case class Vec3(x:Float, y:Float, z:Float) extends PartiallyOrdered[Vec3] {
     Vec2(dot(vX) / vX.mag2, dot(vY)/ vY.mag2)
   }
 
+  /**
+   * Interprets this vector as having coordinates defined relative to the given axis arguments. This method interprets
+   * this vector as being described in the coordinate system xAxis, yAxis, zAxis and constructs an equivalent vector.
+   * Calling Vec3(1,2,3).onAxes(Vec3.X * 10, Vec3.Y + Vec3.Z, Vec3.Z) will interpret the Vec3(1,2,3) as being composed
+   * of the (Vec3.X*10) vector in the x-direction, the (Vec3.Y + Vec3.Z) vector in the y-direction, and the Vec3.Z
+   * vector in the Z direction. This operation is the inverse of calling inAxes(xAxis, yAxis, zAxis).
+   * Returns xAxis*x + yAxis*y + zAxis*z
+   * @param xAxis
+   * @param yAxis
+   * @param zAxis
+   * @return
+   */
   def onAxes(xAxis:Vec3, yAxis:Vec3, zAxis:Vec3) = xAxis*x + yAxis*y + zAxis*z;
+
+  /**
+   * Returns this vector as represented by the given axis arguments. This method decomposes this vector into its
+   * representation in the coordinate system described by xAxis, yAxis, zAxis. Calling Vec3(1,2,3).inAxes(Vec3.X
+   * * 10, Vec3.Y + Vec3.Z, Vec3.Z) will decompose Vec3(1,2,3) into a vector storing an amount of (Vec3.X*10) in the x-coordinate,
+   * (Vec3.Y + Vec3.Z) in the y-coordinate, and (Vec3.Z) in the z coordinate. This operation is the inverse of calling
+   * onAxes(xAxis, yAxis, zAxis)
+   * Returns proj(xAxis) + proj(yAxis) + proj(zAxis)
+   * @param xAxis
+   * @param yAxis
+   * @param zAxis
+   */
+  def inAxes(xAxis:Vec3, yAxis:Vec3, zAxis:Vec3) = proj(xAxis) + proj(yAxis) + proj(zAxis)
 }

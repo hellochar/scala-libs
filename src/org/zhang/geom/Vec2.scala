@@ -125,4 +125,23 @@ case class Vec2(x:Float, y:Float) extends PartiallyOrdered[Vec2] {
   def as3D(vX:Vec3, vY:Vec3) = vX * x + vY * y;
 
   def withZ(z:Float) = Vec3(x, y, z)
+
+  /**
+   * Interprets this vector as having coordinates defined relative to the given axis arguments. This method interprets
+   * this vector as being described in the coordinate system xAxis, yAxis and constructs an equivalent vector.
+   * Returns xAxis*x + yAxis*y
+   * @param xAxis
+   * @param yAxis
+   * @return
+   */
+  def onAxes(xAxis:Vec2, yAxis:Vec2) = xAxis*x + yAxis*y
+
+  /**
+   * Returns this vector as represented by the given axis arguments. This method decomposes this vector into its
+   * representation in the coordinate system described by xAxis, yAxis.
+   * Returns proj(xAxis) + proj(yAxis)
+   * @param xAxis
+   * @param yAxis
+   */
+  def inAxes(xAxis:Vec2, yAxis:Vec2) = proj(xAxis) + proj(yAxis)
 }
