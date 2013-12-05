@@ -14,6 +14,15 @@ import processing.core._
 trait MyPApplet extends PApplet with HasMV {
   import PConstants._
 
+  object Vec2Conversion {
+    implicit def vec2ToPVector(v2: Vec2) = new PVector(v2.x, v2.y)
+    implicit def pVector2Vec2(pv: PVector) = Vec2(pv.x, pv.y)
+  }
+  object Vec3Conversion {
+    implicit def vec3ToPVector(v3: Vec3) = new PVector(v3.x, v3.y, v3.z)
+    implicit def pVector2Vec2(pv: PVector) = Vec3(pv.x, pv.y, pv.z)
+  }
+
   //======================================OVERLOADED TUPLE METHODS==============================================
 //  implicit def ii2v2[T, U](i:(T, U))(implicit num1: Numeric[T], num2: Numeric[U]) = {
 //    Vec2(num1.toFloat(i.x), num2.toFloat(i.y))
