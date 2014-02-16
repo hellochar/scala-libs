@@ -1,6 +1,14 @@
 # What is this?
 
-My own personal library of utility functions/classes.
+My own personal library of Scala utility functions/classes. Note that this library depends on Processing (and Scala of course). It also has a few utility methods for ControlP5.
+
+## How to use?
+
+Download Misc.jar and include it in your projects.
+
+### Documentation? How do I use this?
+
+Unfortunately, there's a lack of proper documentation for this codebase since it was never meant to be a public release. If you are confused about how to use some parts of the code, feel free to ask me, or read the source. Sorry!
 
 ##Contents
 
